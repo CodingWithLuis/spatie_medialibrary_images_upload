@@ -9,9 +9,21 @@
                 <div class="card-header">Editar producto</div>
 
                 <div class="card-body">
-                    <form method="post" action="{{route('products.update', $product->id)}}">
+                    <form method="post" action="{{route('products.update', $product->id)}}" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
+
+                        <div class="col-md-12">
+                            <label for="name">
+                                Imagenes
+                            </label>
+                            <input name="imagenes[]" type="file" class="form-control @error('imagenes') is-invalid @enderror" id="imagenes" multiple />
+                            @if ($errors->has('imagenes'))
+                            <div class="text-danger">
+                                {{$errors->first('imagenes')}}
+                            </div>
+                            @endif
+                        </div>
                         <div class="col-md-12">
                             <label for="name">
                                 Nombre del producto

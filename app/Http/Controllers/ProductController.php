@@ -15,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with(['media'])->get();
 
         return view('products.index', compact('products'));
     }
@@ -39,6 +39,13 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $product = Product::create($request->validated());
+
+        if (request()->hasFile('imagenes')) {
+            $product->addMultipleMediaFromRequest(['imagenes'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->toMediaCollection('products');
+                });
+        }
 
         return redirect()->route('products.index');
     }
@@ -75,6 +82,15 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         $product->update($request->validated());
+
+        if (request()->hasFile('imagenes')) {
+            $product->clearMediaCollection('products');
+
+            $product->addMultipleMediaFromRequest(['imagenes'])
+                ->each(function ($fileAdder) {
+                    $fileAdder->toMediaCollection('products');
+                });
+        }
 
         return redirect()->route('products.index');
     }

@@ -9,8 +9,20 @@
                 <div class="card-header">Nuevo producto</div>
 
                 <div class="card-body">
-                    <form method="post" action="{{route('products.store')}}">
+                    <form method="post" action="{{route('products.store')}}" enctype="multipart/form-data">
                         @csrf
+
+                        <div class="col-md-12">
+                            <label for="name">
+                                Imagenes
+                            </label>
+                            <input name="imagenes[]" type="file" class="form-control @error('imagenes') is-invalid @enderror" id="imagenes" multiple />
+                            @if ($errors->has('imagenes'))
+                            <div class="text-danger">
+                                {{$errors->first('imagenes')}}
+                            </div>
+                            @endif
+                        </div>
                         <div class="col-md-12">
                             <label for="name">
                                 Nombre del producto

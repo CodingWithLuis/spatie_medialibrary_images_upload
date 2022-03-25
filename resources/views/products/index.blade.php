@@ -25,7 +25,11 @@
                             <tr>
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->price }}</td>
-                                <td></td>
+                                <td>
+                                    @foreach ($product->media as $image)
+                                    <img src="{{ $image->getUrl('thumb') }}" alt="imagen no encontrada">
+                                    @endforeach
+                                </td>
                                 <td>
                                     <a href="{{route('products.edit', $product->id)}}" class="btn btn-success">
                                         Editar
